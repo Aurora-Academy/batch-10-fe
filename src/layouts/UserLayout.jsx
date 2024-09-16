@@ -7,7 +7,7 @@ const UserLayout = () => {
     <>
       <div>
         <UserNavbar />
-        <div className="container-fluid" style={{ "min-height": "48rem" }}>
+        <div className="container-fluid" style={{ minHeight: "48rem" }}>
           <Outlet />
         </div>
         <UserFooter />

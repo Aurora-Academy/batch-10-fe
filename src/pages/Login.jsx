@@ -1,12 +1,35 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Alert } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+
+import { axiosInstance } from "../utils/axiosInstance";
+import { URLS } from "../constants";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [login, setLogin] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+
   const showHidePw = () => {
     const currentPw = document.getElementById("myPassword");
     if (currentPw.type === "password") {
       currentPw.type = "text";
     } else {
       currentPw.type = "password";
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const { data } = await axiosInstance.post(`${URLS.USERS}/login`, login);
+      if (data?.data) {
+        navigate("/");
+      }
+    } catch (e) {
+      const errMsg = e?.response?.data?.msg || "Something went wrong";
+      setError(errMsg);
     }
   };
 
@@ -19,10 +42,23 @@ const Login = () => {
               <div className="card-body">
                 <div className="row d-flex justify-content-center align-items-center">
                   <h1 className="text-center">Login</h1>
-                  <form className="d-flex flex-column">
+                  {error && <Alert variant="danger">{error}</Alert>}
+                  <form
+                    className="d-flex flex-column"
+                    onSubmit={(e) => handleSubmit(e)}
+                  >
                     <div className="mb-3">
                       <label className="form-label">Email</label>
-                      <input type="email" className="form-control" />
+                      <input
+                        type="email"
+                        className="form-control"
+                        value={login?.email}
+                        onChange={(e) =>
+                          setLogin((p) => {
+                            return { ...p, email: e.target.value };
+                          })
+                        }
+                      />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Password</label>
@@ -30,6 +66,12 @@ const Login = () => {
                         type="password"
                         className="form-control"
                         id="myPassword"
+                        value={login?.password}
+                        onChange={(e) =>
+                          setLogin((p) => {
+                            return { ...p, password: e.target.value };
+                          })
+                        }
                       />
                     </div>
                     <div className="mb-3 form-check">
