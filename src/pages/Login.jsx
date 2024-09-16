@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const showHidePw = () => {
+    const currentPw = document.getElementById("myPassword");
+    if (currentPw.type === "password") {
+      currentPw.type = "text";
+    } else {
+      currentPw.type = "password";
+    }
+  };
+
   return (
     <>
       <div className="d-flex justify-content-center align-items-center min-vh-100">
@@ -24,7 +33,11 @@ const Login = () => {
                       />
                     </div>
                     <div className="mb-3 form-check">
-                      <input type="checkbox" className="form-check-input" />
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        onClick={showHidePw}
+                      />
                       <label className="form-check-label">Show Password</label>
                     </div>
                     <div className="d-flex justify-content-center">
@@ -40,21 +53,21 @@ const Login = () => {
                 <div className="d-flex justify-content-center align-items-center flex-column mt-2">
                   <div>
                     Forgot
-                    <a
+                    <Link
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      href="/forget-password"
+                      to="/forget-password"
                     >
                       &nbsp;Username/Password?
-                    </a>
+                    </Link>
                   </div>
                   <div>
                     Don&apos;t have an account?
-                    <a
+                    <Link
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      href="/register"
+                      to="/register"
                     >
                       &nbsp;Sign up?
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
