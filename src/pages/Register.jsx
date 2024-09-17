@@ -1,23 +1,24 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { axiosInstance } from "../utils/axiosInstance";
 import { URLS } from "../constants";
 import { setToken } from "../utils/session";
-import { isLoggedIn, setLoggedInUser } from "../utils/login";
 
-const Login = () => {
+const Register = () => {
+  const registerRef = useRef();
   const navigate = useNavigate();
-  const [login, setLogin] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const showHidePw = () => {
-    const currentPw = document.getElementById("myPassword");
-    if (currentPw.type === "password") {
-      currentPw.type = "text";
-    } else {
-      currentPw.type = "password";
+    const currentPw = document.getElementsByClassName("myPassword");
+    for (let i = 0; i < currentPw.length; i++) {
+      if (currentPw[i].type === "password") {
+        currentPw[i].type = "text";
+      } else {
+        currentPw[i].type = "password";
+      }
     }
   };
 
@@ -25,23 +26,19 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      const { data } = await axiosInstance.post(`${URLS.USERS}/login`, login);
-      if (data?.data) {
-        setToken(data.data);
-        setLoggedInUser();
-        navigate("/");
-      }
+      const rawFormData = registerRef.current;
+      const formData = new FormData(rawFormData);
+      formData.delete("confirmPassword");
+      const { data } = await axiosInstance.post(
+        `${URLS.USERS}/register`,
+        formData
+      );
+      console.log({ data });
     } catch (e) {
       const errMsg = e?.response?.data?.msg || "Something went wrong";
       setError(errMsg);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   return (
     <>
@@ -51,37 +48,39 @@ const Login = () => {
             <div className="card shadow" style={{ width: "22rem" }}>
               <div className="card-body">
                 <div className="row d-flex justify-content-center align-items-center">
-                  <h1 className="text-center">Login</h1>
+                  <h1 className="text-center">Register</h1>
                   {error && <Alert variant="danger">{error}</Alert>}
                   <form
+                    ref={registerRef}
                     className="d-flex flex-column"
                     onSubmit={(e) => handleSubmit(e)}
                   >
+                    <div className="mb-3">
+                      <label className="form-label">Name</label>
+                      <input className="form-control" name="name" />
+                    </div>
                     <div className="mb-3">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
                         className="form-control"
-                        value={login?.email}
-                        onChange={(e) =>
-                          setLogin((p) => {
-                            return { ...p, email: e.target.value };
-                          })
-                        }
+                        name="email"
                       />
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Password</label>
                       <input
                         type="password"
-                        className="form-control"
-                        id="myPassword"
-                        value={login?.password}
-                        onChange={(e) =>
-                          setLogin((p) => {
-                            return { ...p, password: e.target.value };
-                          })
-                        }
+                        className="form-control myPassword"
+                        name="password"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Confirm Password</label>
+                      <input
+                        type="password"
+                        className="form-control myPassword"
+                        name="confirmPassword"
                       />
                     </div>
                     <div className="mb-3 form-check">
@@ -104,21 +103,12 @@ const Login = () => {
                 </div>
                 <div className="d-flex justify-content-center align-items-center flex-column mt-2">
                   <div>
-                    Forgot
+                    Already have an account?
                     <Link
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      to="/forget-password"
+                      to="/login"
                     >
-                      &nbsp;Username/Password?
-                    </Link>
-                  </div>
-                  <div>
-                    Don&apos;t have an account?
-                    <Link
-                      className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                      to="/register"
-                    >
-                      &nbsp;Sign up?
+                      &nbsp;Login
                     </Link>
                   </div>
                 </div>
@@ -131,4 +121,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
