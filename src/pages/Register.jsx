@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
-import { Alert } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { axiosInstance } from "../utils/axiosInstance";
 import { URLS } from "../constants";
-import { setToken } from "../utils/session";
 
 const Register = () => {
   const registerRef = useRef();
   const navigate = useNavigate();
+  const [submitDisabled, setSubmitDisabled] = useState(false);
   const [error, setError] = useState("");
 
   const showHidePw = () => {
@@ -29,12 +29,17 @@ const Register = () => {
       const rawFormData = registerRef.current;
       const formData = new FormData(rawFormData);
       formData.delete("confirmPassword");
+      setSubmitDisabled(true);
       const { data } = await axiosInstance.post(
         `${URLS.USERS}/register`,
         formData
       );
-      console.log({ data });
+      if (data.msg === "Please check your email for verification") {
+        setSubmitDisabled(false);
+        navigate("/verify", { state: { email: formData.get("email") } });
+      }
     } catch (e) {
+      setSubmitDisabled(false);
       const errMsg = e?.response?.data?.msg || "Something went wrong";
       setError(errMsg);
     }
@@ -48,7 +53,7 @@ const Register = () => {
             <div className="card shadow" style={{ width: "22rem" }}>
               <div className="card-body">
                 <div className="row d-flex justify-content-center align-items-center">
-                  <h1 className="text-center">Register</h1>
+                  <h1 className="text-center display-4">Register</h1>
                   {error && <Alert variant="danger">{error}</Alert>}
                   <form
                     ref={registerRef}
@@ -95,7 +100,16 @@ const Register = () => {
                       <button
                         type="submit"
                         className="btn btn-primary submit-btn"
+                        disabled={submitDisabled}
                       >
+                        {submitDisabled && (
+                          <Spinner
+                            animation="border"
+                            variant="light"
+                            size="sm"
+                            className="mx-1"
+                          />
+                        )}
                         Submit
                       </button>
                     </div>

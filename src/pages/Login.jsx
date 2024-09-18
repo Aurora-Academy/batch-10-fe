@@ -51,7 +51,7 @@ const Login = () => {
             <div className="card shadow" style={{ width: "22rem" }}>
               <div className="card-body">
                 <div className="row d-flex justify-content-center align-items-center">
-                  <h1 className="text-center">Login</h1>
+                  <h1 className="text-center display-4">Login</h1>
                   {error && <Alert variant="danger">{error}</Alert>}
                   <form
                     className="d-flex flex-column"
@@ -104,21 +104,21 @@ const Login = () => {
                 </div>
                 <div className="d-flex justify-content-center align-items-center flex-column mt-2">
                   <div>
-                    Forgot
+                    Forgot&nbsp;
                     <Link
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                       to="/forget-password"
                     >
-                      &nbsp;Username/Password?
+                      Username/Password?
                     </Link>
                   </div>
                   <div>
-                    Don&apos;t have an account?
+                    Don&apos;t have an account?&nbsp;
                     <Link
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                       to="/register"
                     >
-                      &nbsp;Sign up?
+                      Sign up?
                     </Link>
                   </div>
                 </div>
