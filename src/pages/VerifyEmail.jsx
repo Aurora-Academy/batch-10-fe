@@ -40,7 +40,7 @@ const VerifyEmail = () => {
   const handleInput = (e) => {
     const regex = new RegExp(/^\d+$/, "g");
     const isValid = regex.test(e.target.value);
-    if (isValid) {
+    if (isValid || e.target.value === "") {
       setVerificationData((prev) => {
         return { ...prev, token: e.target.value };
       });
