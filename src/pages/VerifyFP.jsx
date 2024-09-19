@@ -42,15 +42,14 @@ const VerifyFP = () => {
     }
   };
 
-  //   const handleFormCheck = (event) => {
-  //     const { password, confirmPassword } = verificationData;
-  //     if (password === confirmPassword) {
-  //       event.preventDefault();
-  //       event.stopPropagation();
-  //       console.log("match");
-  //       setValidated(true);
-  //     }
-  //   };
+  const handleFormCheck = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setValidated(true);
+  };
 
   const handleInput = (e) => {
     const regex = new RegExp(/^\d+$/, "g");
@@ -98,6 +97,7 @@ const VerifyFP = () => {
                     noValidate
                     validated={validated}
                     onSubmit={handleSubmit}
+                    onChange={handleFormCheck}
                   >
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="validationCustom01">
@@ -119,6 +119,9 @@ const VerifyFP = () => {
                           value={verificationData?.token}
                           maxLength="6"
                           onChange={(e) => handleInput(e)}
+                          isInvalid={
+                            validated && verificationData.token.length < 6
+                          }
                           required
                         />
                         <Form.Control.Feedback type="invalid">
@@ -137,6 +140,9 @@ const VerifyFP = () => {
                             setVerificationData((prev) => {
                               return { ...prev, newPassword: e.target.value };
                             })
+                          }
+                          isInvalid={
+                            validated && verificationData.newPassword.length < 6
                           }
                           required
                         />
@@ -158,6 +164,11 @@ const VerifyFP = () => {
                                 confirmPassword: e.target.value,
                               };
                             })
+                          }
+                          isInvalid={
+                            validated &&
+                            verificationData.confirmPassword !==
+                              verificationData.newPassword
                           }
                           placeholder="Confirm new password"
                           required
