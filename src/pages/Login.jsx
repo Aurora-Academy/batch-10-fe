@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [login, setLogin] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [valid, setValid] = useState(true);
 
   const showHidePw = () => {
     const currentPw = document.getElementById("myPassword");
@@ -54,21 +55,33 @@ const Login = () => {
                   <h1 className="text-center display-4">Login</h1>
                   {error && <Alert variant="danger">{error}</Alert>}
                   <form
-                    className="d-flex flex-column"
+                    className={"d-flex flex-column"}
                     onSubmit={(e) => handleSubmit(e)}
                   >
                     <div className="mb-3">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
-                        className="form-control"
+                        className={`form-control ${valid ? "" : "is-invalid"}`}
                         value={login?.email}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                          setValid(true);
                           setLogin((p) => {
                             return { ...p, email: e.target.value };
-                          })
-                        }
+                          });
+                        }}
+                        onBlur={(e) => {
+                          new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/).test(
+                            e.target.value
+                          )
+                            ? setValid(true)
+                            : setValid(false);
+                        }}
+                        required
                       />
+                      <div className="invalid-feedback">
+                        Please provide proper email
+                      </div>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Password</label>
@@ -82,6 +95,7 @@ const Login = () => {
                             return { ...p, password: e.target.value };
                           })
                         }
+                        required
                       />
                     </div>
                     <div className="mb-3 form-check">
