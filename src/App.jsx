@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminOrders from "./pages/admin/Orders";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -28,7 +29,14 @@ function App() {
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
-          <Route path="orders" element={<AdminOrders />} />
+          <Route
+            path="orders"
+            element={
+              <PrivateRoute>
+                <AdminOrders />
+              </PrivateRoute>
+            }
+          />
           <Route path="users" element={<AdminUsers />} />
         </Route>
         <Route path="*" element={<NotFound />} />
