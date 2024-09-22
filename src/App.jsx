@@ -6,6 +6,11 @@ import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgetPassword from "./pages/ForgetPassword";
 import VerifyFP from "./pages/VerifyFP";
+import AdminLayout from "./layouts/AdminLayout";
+import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminUsers from "./pages/admin/Users";
+import AdminOrders from "./pages/admin/Orders";
 
 function App() {
   return (
@@ -16,9 +21,17 @@ function App() {
         <Route path="/verify" element={<VerifyEmail />} />
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/forget-password/verify" element={<VerifyFP />} />
+        {/* User Routes */}
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
         </Route>
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="users" element={<AdminUsers />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
