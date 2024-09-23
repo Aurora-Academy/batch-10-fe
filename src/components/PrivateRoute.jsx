@@ -1,15 +1,25 @@
 import { Navigate } from "react-router-dom";
-import { isLoggedIn } from "../utils/login";
+import { isLoggedIn, isValidRole } from "../utils/login";
 import PropTypes from "prop-types";
 
 // Higher Order Component
 const PrivateRoute = ({ children, role }) => {
-  return <>{isLoggedIn() ? children : <Navigate replace to="/login" />}</>;
+  return (
+    <>
+      {isLoggedIn() && isValidRole(role) ? (
+        children
+      ) : isLoggedIn() && !isValidRole(role) ? (
+        <Navigate replace to="/admin/dashboard" />
+      ) : (
+        <Navigate replace to="/login" />
+      )}
+    </>
+  );
 };
 
 PrivateRoute.propTypes = {
   children: PropTypes.element.isRequired,
-  role: PropTypes.string,
+  role: PropTypes.array,
 };
 
 export default PrivateRoute;

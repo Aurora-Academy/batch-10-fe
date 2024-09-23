@@ -8,7 +8,7 @@ const AdminLayout = () => {
       <div className="d-flex vh-100">
         <AdminNavbar />
         <div className="container-fluid" style={{ minHeight: "48rem" }}>
-          <div className="container-fluid" style={{ minHeight: "49.6rem" }}>
+          <div className="container-fluid" style={{ minHeight: "53rem" }}>
             <div className="container">
               <Outlet />
             </div>

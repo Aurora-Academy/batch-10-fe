@@ -1,77 +1,98 @@
-import React from "react";
+import { Dropdown } from "react-bootstrap";
+import { MdAccountCircle } from "react-icons/md";
+
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getCurrentUser, removeAll } from "../utils/session";
 
 const AdminNavbar = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const isAdmin = JSON.parse(getCurrentUser()).roles.includes("admin");
+
+  const handleLogout = () => {
+    removeAll();
+    navigate("/login");
+  };
   return (
     <div
       className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
       style={{ width: "280px", maxWidth: "280px" }}
     >
-      <a
-        href="/"
+      <Link
+        to="/admin/dashboard"
         className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
       >
         <span className="fs-4">XYZ Hotel</span>
-      </a>
+      </Link>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item">
-          <a href="#" className="nav-link text-white">
+          <Link
+            to="/admin/dashboard"
+            className={`nav-link text-white  ${
+              pathname.includes("dashboard") ? "active" : ""
+            }`}
+          >
             <i className="bi bi-house"></i>
             Home
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a href="#" className="nav-link text-white">
+          <Link
+            to="/admin/orders"
+            className={`nav-link text-white  ${
+              pathname.includes("orders") ? "active" : ""
+            }`}
+          >
             <i className="bi bi-bag"></i>
             Orders
-          </a>
+          </Link>
         </li>
-        <li className="nav-item">
-          <a href="#" className="nav-link text-white">
-            <i className="bi bi-archive"></i>
-            Rooms
-          </a>
-        </li>
-        <li className="nav-item">
-          <a href="#" className="nav-link text-white active">
-            <i className="bi bi-people"></i>
-            Users
-          </a>
-        </li>
+        {isAdmin && (
+          <>
+            <li className="nav-item">
+              <Link
+                to="/admin/rooms"
+                className={`nav-link text-white  ${
+                  pathname.includes("rooms") ? "active" : ""
+                }`}
+              >
+                <i className="bi bi-archive"></i>
+                Rooms
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/admin/users"
+                className={`nav-link text-white  ${
+                  pathname.includes("users") ? "active" : ""
+                }`}
+              >
+                <i className="bi bi-people"></i>
+                Users
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
       <hr />
-      <div className="dropdown">
-        <a
-          href="#"
-          className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <img
-            src="https://github.com/mdo.png"
-            alt=""
-            width="32"
-            height="32"
-            className="rounded-circle me-2"
-          />
-          <strong>mdo</strong>
-        </a>
-        <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-          <li>
-            <a className="dropdown-item" href="#">
-              Profile
-            </a>
-          </li>
-          <li>
-            <hr className="dropdown-divider" />
-          </li>
-          <li>
-            <a className="dropdown-item" href="#">
-              Sign out
-            </a>
-          </li>
-        </ul>
-      </div>
+      <Dropdown>
+        <Dropdown.Toggle split variant="dark">
+          <MdAccountCircle size="1.5rem" />
+          &nbsp;
+          <strong>{JSON.parse(getCurrentUser())?.name || ""}</strong>
+          &nbsp;
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Link to="/admin/profile" className="dropdown-item">
+            Profile
+          </Link>
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 };

@@ -12,6 +12,8 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminOrders from "./pages/admin/Orders";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRooms from "./pages/admin/Rooms";
+import AdminProfile from "./pages/admin/Profile";
 
 function App() {
   return (
@@ -28,17 +30,48 @@ function App() {
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
+          <Route
+            path="dashboard"
+            element={
+              <PrivateRoute role={["admin", "user"]}>
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="orders"
             element={
-              <PrivateRoute>
+              <PrivateRoute role={["admin", "user"]}>
                 <AdminOrders />
               </PrivateRoute>
             }
           />
-          <Route path="users" element={<AdminUsers />} />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute role={["admin", "user"]}>
+                <AdminProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="rooms"
+            element={
+              <PrivateRoute role={["admin"]}>
+                <AdminRooms />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <PrivateRoute role={["admin"]}>
+                <AdminUsers />
+              </PrivateRoute>
+            }
+          />
         </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
