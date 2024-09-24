@@ -49,6 +49,11 @@ const UserNavbar = () => {
             </Nav>
           </Navbar.Collapse>
           <Navbar.Text>
+            <span className="m-2">
+              <Link to="/booking" className="btn btn-danger">
+                Book Now
+              </Link>
+            </span>
             {loggedIn && getUserInfo() ? (
               <>
                 <Dropdown as={ButtonGroup}>

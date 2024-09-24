@@ -14,6 +14,7 @@ import AdminOrders from "./pages/admin/Orders";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRooms from "./pages/admin/Rooms";
 import AdminProfile from "./pages/admin/Profile";
+import Booking from "./pages/Booking";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         {/* User Routes */}
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
+          <Route path="booking" element={<Booking />} />
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
