@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminRooms from "./pages/admin/Rooms";
 import AdminProfile from "./pages/admin/Profile";
 import Booking from "./pages/Booking";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
           <Route path="booking" element={<Booking />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>

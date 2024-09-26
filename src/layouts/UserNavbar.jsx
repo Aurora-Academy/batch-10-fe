@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonGroup,
+  ButtonToolbar,
   Container,
   Dropdown,
   Nav,
@@ -11,8 +12,12 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { getCurrentUser, removeAll } from "../utils/session";
 import { isLoggedIn } from "../utils/login";
+import { ShoppingButton } from "../components/AddButton";
+
+import { useSelector } from "react-redux";
 
 const UserNavbar = () => {
+  const { quantity } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const loggedIn = isLoggedIn();
 
@@ -48,51 +53,58 @@ const UserNavbar = () => {
               </Link>
             </Nav>
           </Navbar.Collapse>
-          <Navbar.Text>
-            <span className="m-2">
-              <Link to="/booking" className="btn btn-danger">
-                Book Now
-              </Link>
-            </span>
-            {loggedIn && getUserInfo() ? (
-              <>
-                <Dropdown as={ButtonGroup}>
-                  <Button
-                    variant="secondary"
-                    onClick={() => navigate("/admin/dashboard")}
-                  >
-                    Welcome {getUserInfo()}
-                  </Button>
-                  <Dropdown.Toggle
-                    split
-                    variant="secondary"
-                    id="dropdown-split-basic"
-                  />
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => navigate("/admin/profile")}>
-                      My Profile
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => navigate("/admin/orders")}>
-                      My Orders
-                    </Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item
-                      onClick={() => {
-                        removeAll();
-                        navigate("/");
-                      }}
+          <ButtonToolbar>
+            <ButtonGroup className="me-2">
+              <span className="m-2">
+                <Link to="/booking" className="btn btn-danger">
+                  Book Now
+                </Link>
+              </span>
+            </ButtonGroup>
+            <ButtonGroup className="me-2">
+              <span className="m-2">
+                <Link to="/cart" className="btn btn-warning">
+                  <ShoppingButton size={Number(quantity)} />
+                </Link>
+              </span>
+            </ButtonGroup>
+            <ButtonGroup>
+              {loggedIn && getUserInfo() ? (
+                <>
+                  <Dropdown as={ButtonGroup}>
+                    <Button
+                      variant="secondary"
+                      onClick={() => navigate("/admin/dashboard")}
                     >
-                      Log Out
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </>
-            ) : (
-              <Link to="/login">
-                <TbLogin2 size="1.5rem" />
-              </Link>
-            )}
-          </Navbar.Text>
+                      Welcome {getUserInfo()}
+                    </Button>
+                    <Dropdown.Toggle split variant="secondary" />
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => navigate("/admin/profile")}>
+                        My Profile
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => navigate("/admin/orders")}>
+                        My Orders
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item
+                        onClick={() => {
+                          removeAll();
+                          navigate("/");
+                        }}
+                      >
+                        Log Out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </>
+              ) : (
+                <Link to="/login" className="btn btn-danger">
+                  <TbLogin2 size="1.5rem" />
+                </Link>
+              )}
+            </ButtonGroup>
+          </ButtonToolbar>
         </Container>
       </Navbar>
     </div>
