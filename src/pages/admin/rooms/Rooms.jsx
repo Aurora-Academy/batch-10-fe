@@ -8,11 +8,16 @@ import Paginate from "../../../components/Paginate";
 import AddButton from "../../../components/AddButton";
 import TableLoader from "../../../components/TableLoader";
 
-import { listRooms, removeRoom } from "../../../slices/roomSlice";
+import {
+  listRooms,
+  removeRoom,
+  setCurrentPage,
+  setLimit,
+} from "../../../slices/roomSlice";
 
 const AdminRooms = () => {
   const dispatch = useDispatch();
-  const { rooms, currentPage, limit, loading } = useSelector(
+  const { rooms, currentPage, limit, loading, total } = useSelector(
     (state) => state.rooms
   );
 
@@ -129,7 +134,14 @@ const AdminRooms = () => {
             )}
           </tbody>
         </table>
-        <Paginate />
+        <Paginate
+          dispatch={dispatch}
+          currentPage={currentPage}
+          limit={Number(limit)}
+          total={total}
+          setLimit={setLimit}
+          setPage={setCurrentPage}
+        />
       </div>
     </>
   );

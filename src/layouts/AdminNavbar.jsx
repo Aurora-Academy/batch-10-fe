@@ -8,7 +8,7 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const isAdmin = JSON.parse(getCurrentUser()).roles.includes("admin");
+  const isAdmin = JSON.parse(getCurrentUser())?.roles.includes("admin");
 
   const handleLogout = () => {
     removeAll();

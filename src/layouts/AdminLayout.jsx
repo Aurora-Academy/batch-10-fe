@@ -7,10 +7,15 @@ const AdminLayout = () => {
     <>
       <div className="d-flex vh-100">
         <AdminNavbar />
-        <div className="container-fluid" style={{ minHeight: "48rem" }}>
+        <div
+          className="container-fluid overflow-auto"
+          style={{ minHeight: "48rem" }}
+        >
           <div className="container-fluid" style={{ minHeight: "53rem" }}>
             <div className="container">
-              <Outlet />
+              <div className="">
+                <Outlet />
+              </div>
             </div>
           </div>
           <UserFooter />
