@@ -20,9 +20,15 @@ export const listRooms = createAsyncThunk(
 );
 export const createRoom = createAsyncThunk(
   "rooms/createRoom",
-  async (payload) => {
-    const res = await RoomServices.create(payload);
-    return res.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await RoomServices.create(payload);
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 export const getRoomById = createAsyncThunk("rooms/getRoomById", async (id) => {
@@ -43,10 +49,19 @@ export const updateRoomStatus = createAsyncThunk(
     return res.data;
   }
 );
-export const removeRoom = createAsyncThunk("rooms/removeRoom", async (id) => {
-  const res = await RoomServices.removeRoom(id);
-  return res.data;
-});
+export const removeRoom = createAsyncThunk(
+  "rooms/removeRoom",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await RoomServices.removeRoom(id);
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
+  }
+);
 
 const roomSlice = createSlice({
   name: "rooms",
@@ -71,6 +86,7 @@ const roomSlice = createSlice({
         state.loading = true;
         state.rooms = [];
         state.total = 0;
+        state.error = "";
       })
       .addCase(listRooms.rejected, (state, action) => {
         state.loading = false;
@@ -86,10 +102,23 @@ const roomSlice = createSlice({
       })
       .addCase(removeRoom.pending, (state) => {
         state.loading = true;
+        state.error = "";
       })
       .addCase(removeRoom.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload.data;
+      })
+      .addCase(createRoom.fulfilled, (state, action) => {
+        state.loading = false;
+        state.room = action.payload.data;
+      })
+      .addCase(createRoom.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(createRoom.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.data;
       });
   },
 });

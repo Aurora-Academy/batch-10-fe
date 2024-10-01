@@ -2,37 +2,43 @@ import { axiosInstance } from "../utils/axiosInstance";
 import { URLS } from "../constants";
 import { getToken } from "../utils/session";
 
-const config = {
-  headers: {
-    access_token: getToken(),
-  },
+const headers = {
+  access_token: getToken(),
 };
 
 const list = ({ limit, page, name, status }) => {
   return axiosInstance.get(
     `${URLS.ROOMS}?page=${page}&limit=${limit}&name=${name}&status=${status}`,
-    config
+    { headers: { ...headers } }
   );
 };
 
 const create = (payload) => {
-  return axiosInstance.post(URLS.ROOMS, payload, config);
+  return axiosInstance.post(URLS.ROOMS, payload, {
+    headers: { ...headers, "Content-Type": "multipart/form-data" },
+  });
 };
 
 const getRoomById = (id) => {
-  return axiosInstance.get(`${URLS.ROOMS}/${id}`, { ...config });
+  return axiosInstance.get(`${URLS.ROOMS}/${id}`, { headers: { ...headers } });
 };
 
 const updateRoom = (id, payload) => {
-  return axiosInstance.put(`${URLS.ROOMS}/${id}`, payload, { ...config });
+  return axiosInstance.put(`${URLS.ROOMS}/${id}`, payload, {
+    headers: { ...headers },
+  });
 };
 
 const updateRoomStatus = (id, payload) => {
-  return axiosInstance.patch(`${URLS.ROOMS}/${id}`, payload, { ...config });
+  return axiosInstance.patch(`${URLS.ROOMS}/${id}`, payload, {
+    headers: { ...headers },
+  });
 };
 
 const removeRoom = (name) => {
-  return axiosInstance.delete(`${URLS.ROOMS}/${name}`, { ...config });
+  return axiosInstance.delete(`${URLS.ROOMS}/${name}`, {
+    headers: { ...headers },
+  });
 };
 
 const RoomServices = {
