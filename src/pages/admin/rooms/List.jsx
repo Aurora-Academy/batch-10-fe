@@ -1,8 +1,11 @@
+import "react-toastify/dist/ReactToastify.css";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { TbEdit, TbTrash } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 import Paginate from "../../../components/Paginate";
 import AddButton from "../../../components/AddButton";
@@ -34,6 +37,32 @@ const AdminRooms = () => {
       })
     );
   }, [currentPage, dispatch, limit, searchName, searchStatus]);
+
+  const handleDelete = async (e, roomName) => {
+    e.preventDefault();
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (isConfirmed) {
+      const d = await dispatch(removeRoom(roomName));
+      if (d?.payload.data) {
+        toast(d?.payload?.data || "Something went wrong");
+      }
+      if (d?.payload?.msg) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Room has been deleted.",
+          icon: "success",
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     initFetch();
@@ -117,7 +146,7 @@ const AdminRooms = () => {
                       <div
                         className="btn-group"
                         role="button"
-                        onClick={() => dispatch(removeRoom(room?.name))}
+                        onClick={(e) => handleDelete(e, room?.name)}
                       >
                         <TbTrash className="text-danger" />
                       </div>

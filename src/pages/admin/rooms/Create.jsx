@@ -1,5 +1,6 @@
+import "react-toastify/dist/ReactToastify.css";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Button,
   ButtonGroup,
@@ -8,15 +9,15 @@ import {
   Image,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import { Notify } from "../../../components/Notify";
 
 import { createRoom } from "../../../slices/roomSlice";
 
 const Create = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error, room } = useSelector((state) => state.rooms);
+  const { error } = useSelector((state) => state.rooms);
   const [preview, setPreview] = useState([]);
   const [images, setImages] = useState([]);
   const [payload, setPayload] = useState({
@@ -33,7 +34,7 @@ const Create = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", payload?.name);
@@ -41,14 +42,11 @@ const Create = () => {
     formData.append("price", payload?.price);
     formData.append("totalGuests", payload?.totalGuests);
     formData.append("image", images[0] ?? "");
-    dispatch(createRoom(formData));
-  };
-
-  useEffect(() => {
-    if (room._id) {
-      navigate("/admin/rooms");
+    const d = await dispatch(createRoom(formData));
+    if (d?.payload?.msg) {
+      toast(d?.payload?.msg || "Something went wrong");
     }
-  }, [navigate, room?._id]);
+  };
 
   useEffect(() => {
     setPreview([]);

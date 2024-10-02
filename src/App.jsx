@@ -12,7 +12,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
 import AdminOrders from "./pages/admin/Orders";
 import PrivateRoute from "./components/PrivateRoute";
-import AdminRooms from "./pages/admin/rooms/Rooms";
+import AdminRooms from "./pages/admin/rooms/List";
 import AdminRoomsCreate from "./pages/admin/rooms/Create";
 
 import AdminProfile from "./pages/admin/Profile";
