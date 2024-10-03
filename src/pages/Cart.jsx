@@ -50,23 +50,27 @@ const Cart = () => {
                       <td>{item?.price}</td>
                       <td>{item?.totalGuests}</td>
                       <td>
-                        <span
+                        <button
+                          disabled
                           className="btn btn-sm btn-danger m-1"
                           onClick={() =>
                             dispatch(decreaseQuantity({ _id: item?._id }))
                           }
                         >
                           -
-                        </span>
-                        <span className="btn btn-light">{item?.quantity}</span>
-                        <span
+                        </button>
+                        <button className="btn btn-light" disabled>
+                          {item?.quantity}
+                        </button>
+                        <button
+                          disabled
                           className="btn btn-sm btn-danger m-1"
                           onClick={() =>
                             dispatch(increaseQuantity({ _id: item?._id }))
                           }
                         >
                           +
-                        </span>
+                        </button>
                       </td>
                       <td>{item?.price * item?.quantity}</td>
                       <td>
@@ -89,6 +93,31 @@ const Cart = () => {
                       className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                     >
                       Continue Shopping
+                    </Link>
+                  </td>
+                </tr>
+              )}
+              {cart.reduce(
+                (prevValue, acc) =>
+                  prevValue + Number(acc.price) * Number(acc.quantity),
+                0
+              ) > 0 && (
+                <tr>
+                  <td colSpan={5}>Total</td>
+                  <td colSpan={1}>
+                    {cart.reduce(
+                      (prevValue, acc) =>
+                        prevValue + Number(acc.price) * Number(acc.quantity),
+                      0
+                    )}
+                  </td>
+
+                  <td colSpan={1}>
+                    <Link
+                      to="/checkout"
+                      className="link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                    >
+                      Checkout Now
                     </Link>
                   </td>
                 </tr>

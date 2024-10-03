@@ -19,6 +19,8 @@ import AdminProfile from "./pages/admin/Profile";
 import Booking from "./pages/Booking";
 import Cart from "./pages/Cart";
 import AdminRoomEdit from "./pages/admin/rooms/Edit";
+import Checkout from "./pages/Checkout";
+import CheckoutStatus from "./pages/CheckoutStatus";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="booking" element={<Booking />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="checkout/status" element={<CheckoutStatus />} />
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
