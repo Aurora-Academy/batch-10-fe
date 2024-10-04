@@ -38,11 +38,13 @@ const Checkout = () => {
     e.preventDefault();
     const formData = { ...payload, rooms, amount: grandTotal };
     const order = await OrderServices.create(formData);
-    if (order) {
+    if (order?._id) {
       await dispatch(removeAll());
       setGrandTotal(0);
       setRooms([]);
-      navigate("/checkout/status");
+      navigate("/checkout/status/success");
+    } else {
+      navigate("/checkout/status/failed");
     }
   };
 

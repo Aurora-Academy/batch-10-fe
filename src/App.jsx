@@ -37,7 +37,13 @@ function App() {
           <Route path="booking" element={<Booking />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
-          <Route path="checkout/status" element={<CheckoutStatus />} />
+          <Route path="checkout/status/success" element={<CheckoutStatus />} />
+          <Route
+            path="checkout/status/failed"
+            element={
+              <CheckoutStatus msg="Your order has failed!" status="danger" />
+            }
+          />
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
