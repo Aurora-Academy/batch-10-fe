@@ -14,6 +14,7 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
 import { cartReducer } from "../slices/cartSlice";
 import { roomReducer } from "../slices/roomSlice";
+import { orderReducer } from "../slices/orderSlice";
 
 const persistConfig = {
   key: "cart",
@@ -27,6 +28,7 @@ export const store = configureStore({
   reducer: {
     cart: persistedCart,
     rooms: roomReducer,
+    orders: orderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

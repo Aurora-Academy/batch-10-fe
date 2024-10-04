@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { removeAll } from "../slices/cartSlice";
-import OrderServices from "../services/orders";
 import { getCurrentUser } from "../utils/session";
+
+import OrderServices from "../services/orders";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { quantity, cart } = useSelector((state) => state.cart);
   const user = JSON.parse(getCurrentUser());
+  const [loginError, setLoginError] = useState("");
   const [grandTotal, setGrandTotal] = useState(
     cart.reduce(
       (prev, acc) => prev + Number(acc?.quantity) * Number(acc?.price),
@@ -38,7 +43,7 @@ const Checkout = () => {
     e.preventDefault();
     const formData = { ...payload, rooms, amount: grandTotal };
     const order = await OrderServices.create(formData);
-    if (order?._id) {
+    if (order?.data?.data?._id) {
       await dispatch(removeAll());
       setGrandTotal(0);
       setRooms([]);
@@ -48,6 +53,12 @@ const Checkout = () => {
     }
   };
 
+  useEffect(() => {
+    if (!user?.email && !user?.name) {
+      setLoginError(`Please login to proceed.`);
+    }
+  }, [user?.email, user?.name]);
+
   return (
     <div className="container">
       <main>
@@ -55,6 +66,14 @@ const Checkout = () => {
           <h2>Checkout Room</h2>
           <p className="lead">Hotel booking at your finger tips</p>
         </div>
+        {loginError && (
+          <div className="text-center">
+            <Alert variant="danger">
+              {loginError} Click&nbsp;
+              <Link to="/login">here</Link>
+            </Alert>
+          </div>
+        )}
         <div className="row g-5">
           {/* <!--cart--> */}
           <div className="col-md-5 col-lg-4 order-md-last">
@@ -177,7 +196,11 @@ const Checkout = () => {
 
               <hr className="my-4" />
 
-              <button className="w-100 btn btn-primary btn-lg" type="submit">
+              <button
+                className="w-100 btn btn-primary btn-lg"
+                type="submit"
+                disabled={loginError}
+              >
                 Continue to checkout
               </button>
             </form>

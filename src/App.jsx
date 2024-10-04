@@ -10,7 +10,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminUsers from "./pages/admin/Users";
-import AdminOrders from "./pages/admin/Orders";
+import AdminOrders from "./pages/admin/orders/List";
+import AdminOrderCreate from "./pages/admin/orders/Create";
+import AdminOrderEdit from "./pages/admin/orders/Edit";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRooms from "./pages/admin/rooms/List";
 import AdminRoomsCreate from "./pages/admin/rooms/Create";
@@ -60,6 +62,22 @@ function App() {
             element={
               <PrivateRoute role={["admin", "user"]}>
                 <AdminOrders />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="orders/create"
+            element={
+              <PrivateRoute role={["admin"]}>
+                <AdminOrderCreate />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="orders/:id"
+            element={
+              <PrivateRoute role={["admin"]}>
+                <AdminOrderEdit />
               </PrivateRoute>
             }
           />
